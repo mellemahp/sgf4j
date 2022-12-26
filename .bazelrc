@@ -1,0 +1,71 @@
+#####################
+# BUILD CONFIGURATION
+#####################
+# For more info on configuration options see: https://docs.bazel.build/versions/master/command-line-reference.html#build-options
+
+# Correct issue with latest version of bazel not handling lombok
+# See https://github.com/bazelbuild/bazel/issues/12837
+build --nojava_header_compilation
+
+# enforce worker sandboxing
+build --worker_sandboxing
+
+# Performance: avoid stat'ing input files
+build --watchfs
+
+# Set shorter timeout to kill processes
+build --local_termination_grace_seconds=3
+
+##################################
+# Set java language to jdk 17    #
+##################################
+build --java_language_version=17
+build --java_runtime_version=17
+build --tool_java_language_version=17
+build --tool_java_runtime_version=17
+test --java_language_version=17
+test --java_runtime_version=17
+test --tool_java_language_version=17
+test --tool_java_runtime_version=17
+
+
+###################
+# Recommended from:
+# https://blog.aspect.dev/bazelrc-flags
+###################
+### PERFORMANCE FIXES
+build --experimental_remote_merkle_tree_cache
+query --experimental_remote_merkle_tree_cache
+build --incompatible_remote_results_ignore_disk
+
+# Observed to speed up an Angular build from 7.5min to 5min
+build --experimental_reuse_sandbox_directories
+
+# Avoid waiting on 'Waiting for build events upload: Build Event Service'
+build --bes_upload_mode=fully_async
+
+#### Correctness guarantees
+startup --host_jvm_args=-DBAZEL_TRACK_SOURCE_DIRECTORIES=1
+test --incompatible_exclusive_test_sandboxed
+build --incompatible_strict_action_env
+build --nolegacy_external_runfiles
+build --incompatible_remote_results_ignore_disk
+build --incompatible_default_to_explicit_init_py
+build --incompatible_allow_tags_propagation
+
+### Convenience
+build --remote_local_fallback
+build --heap_dump_on_oom
+build --keep_going
+test  --keep_going
+test --test_verbose_timeout_warnings
+
+### IMPORT CUSTOM BUILD CONFIG FILE PER USER
+try-import %workspace%/.bazelrc.user
+
+#####################
+# TEST CONFIGURATION
+#####################
+# Correct issue with latest version of bazel not handling lombok
+#See https://github.com/bazelbuild/bazel/issues/12837
+test --nojava_header_compilation
