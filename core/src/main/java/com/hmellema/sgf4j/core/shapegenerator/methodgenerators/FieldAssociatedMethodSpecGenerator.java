@@ -5,5 +5,5 @@ import com.squareup.javapoet.MethodSpec;
 
 @FunctionalInterface
 public interface FieldAssociatedMethodSpecGenerator {
-  MethodSpec generateMethod(FieldSpec fieldSpec);
+    MethodSpec generateMethod(FieldSpec fieldSpec);
 }

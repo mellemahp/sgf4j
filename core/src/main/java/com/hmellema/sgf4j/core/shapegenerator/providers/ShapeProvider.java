@@ -5,7 +5,9 @@ import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public interface ShapeProvider {
-  Shape getShape();
-  ShapeId getShapeId();
-  ShapeType getShapeType();
+    Shape getShape();
+
+    ShapeId getShapeId();
+
+    ShapeType getShapeType();
 }

@@ -53,6 +53,10 @@ build --incompatible_remote_results_ignore_disk
 build --incompatible_default_to_explicit_init_py
 build --incompatible_allow_tags_propagation
 
+### Bazel Module
+#build --enable_bzlmod
+#build --java_header_compilation=false
+
 ### Convenience
 build --remote_local_fallback
 build --heap_dump_on_oom

@@ -40,6 +40,27 @@ maven_install(
     repositories = MAVEN_REPOS,
 )
 
+#######
+# PMD #
+#######
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+rules_pmd_version="0.2.0"
+rules_pmd_sha="54b76b07b32c10886d50af52188a1410ec95e046f0425ad23c484e9d8de3b7f7"
+
+http_archive(
+    name = "rules_pmd",
+    sha256 = rules_pmd_sha,
+    strip_prefix = "bazel_rules_pmd-{v}".format(v = rules_pmd_version),
+    url = "https://github.com/buildfoundation/bazel_rules_pmd/archive/v{v}.tar.gz".format(v = rules_pmd_version),
+)
+
+load("@rules_pmd//pmd:dependencies.bzl", "rules_pmd_dependencies")
+rules_pmd_dependencies()
+
+load("@rules_pmd//pmd:toolchains.bzl", "rules_pmd_toolchains")
+rules_pmd_toolchains()
+
 #############
 # Test Deps #
 #############

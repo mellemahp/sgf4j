@@ -8,9 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PACKAGE)
 public @interface Sgf4j {
-  String NAME = "com.hmellema.sgf4j.annotations.Sgf4j";
+    String NAME = "com.hmellema.sgf4j.annotations.Sgf4j";
 
-  String astPath();
+    String astPath();
 
-  String[] filters() default "";
+    String[] filters() default "";
 }
