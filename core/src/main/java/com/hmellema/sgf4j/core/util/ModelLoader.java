@@ -1,10 +1,11 @@
 package com.hmellema.sgf4j.core.util;
 
-import com.hmellema.sgf4j.core.api.Sgf4jGenerationRequest;
 import software.amazon.smithy.model.Model;
 
+import java.net.URL;
+
 public interface ModelLoader {
-    static Model load(Sgf4jGenerationRequest request) {
-        return Model.assembler().addImport(request.smithyModelPath()).assemble().unwrap();
+    static Model load(URL modelURL) {
+        return Model.assembler().addImport(modelURL).assemble().unwrap();
     }
 }

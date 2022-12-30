@@ -19,6 +19,8 @@ java_library(
         # base deps
         "//annotations:sgf4j-annotations",
         "//core:sgf4j-core",
+        artifact("com.squareup:javapoet"),
+        artifact("software.amazon.smithy:smithy-model"),
         artifact("com.google.auto.service:auto-service-annotations")
     ],
     javacopts = JAVAC_OPTS,

@@ -5,7 +5,11 @@ import com.hmellema.sgf4j.annotations.Sgf4j;
 import com.hmellema.sgf4j.core.DefaultCodeGenerator;
 import com.hmellema.sgf4j.core.api.Sgf4jGenerationRequest;
 import com.hmellema.sgf4j.core.api.Sgf4jGenerator;
+import com.hmellema.sgf4j.core.generator.exceptions.GenerationException;
+import com.hmellema.sgf4j.core.util.ModelLoader;
 import com.hmellema.sgf4j.processor.exceptions.FailToLoadAstException;
+import com.squareup.javapoet.JavaFile;
+import software.amazon.smithy.model.transform.ModelTransformer;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -48,7 +52,9 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
             return false;
         }
         final Sgf4jGenerationRequest request = extractRequestFromAnnotation(getAnnotation(elements));
-        codeGenerator.generate(request);
+        var javaFiles = codeGenerator.generate(request);
+        messager.printMessage(Diagnostic.Kind.NOTE, "Model Processed. Writing files.");
+        javaFiles.forEach(this::writeFile);
         messager.printMessage(Diagnostic.Kind.NOTE,
                 "Annotation processor " + this.getClass().getSimpleName() + " finished processing.");
         return true;
@@ -62,8 +68,18 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
     }
 
     private Sgf4jGenerationRequest extractRequestFromAnnotation(final Sgf4j annotation) {
-        return new Sgf4jGenerationRequest(getSmithyFileResourceURL(annotation.astPath()), filer,
-                Arrays.stream(annotation.filters()).toList());
+        var unfilteredModel = ModelLoader.load(getSmithyFileResourceURL(annotation.astPath()));
+        var filteredModel = ModelTransformer.create().getModelWithoutTraitShapes(unfilteredModel);
+
+        return new Sgf4jGenerationRequest(filteredModel, Arrays.stream(annotation.filters()).toList());
+    }
+
+    private void writeFile(JavaFile generatedFile) {
+        try {
+            generatedFile.writeTo(filer);
+        } catch (IOException e) {
+            throw new GenerationException("Code generation failed for Java file" + generatedFile, e);
+        }
     }
 
     private URL getSmithyFileResourceURL(final String path) {

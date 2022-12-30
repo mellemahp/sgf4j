@@ -2,7 +2,6 @@ package com.hmellema.sgf4j.core;
 
 import com.hmellema.sgf4j.core.api.Sgf4jGenerationRequest;
 import com.hmellema.sgf4j.core.api.Sgf4jGenerator;
-import com.hmellema.sgf4j.core.generator.executors.GenerationExecutor;
 import com.hmellema.sgf4j.core.plugin.extensionpoints.ResolverExtensionPoint;
 import com.hmellema.sgf4j.core.plugin.extensionpoints.ShapeProcessorExtensionPoint;
 import com.hmellema.sgf4j.core.plugin.extensionpoints.TraitProcessorExtensionPoint;
@@ -14,7 +13,7 @@ import com.hmellema.sgf4j.core.resolver.Resolver;
 import com.hmellema.sgf4j.core.resolver.executor.ResolverExecutor;
 import com.hmellema.sgf4j.core.typeconversion.TypeConverter;
 import com.hmellema.sgf4j.core.typeconversion.TypeConverterMap;
-import com.hmellema.sgf4j.core.util.ModelLoader;
+import com.squareup.javapoet.JavaFile;
 import org.pf4j.DefaultPluginManager;
 import org.pf4j.PluginManager;
 
@@ -30,22 +29,22 @@ public class DefaultCodeGenerator implements Sgf4jGenerator {
     private final List<TraitProcessor> traitProcessors = new ArrayList<>();
 
     @Override
-    public void generate(Sgf4jGenerationRequest request) {
+    public List<JavaFile> generate(Sgf4jGenerationRequest request) {
         // load plugins
         initExtensions();
 
         // set up all exectuors
-        var model = ModelLoader.load(request);
+        var model = request.model();
         var converterMap = new TypeConverterMap(converters);
         var resolver = new ResolverExecutor(resolvers, request.namespaceFilters(), converterMap);
         var processor = new ProcessorExecutor(shapeProcessors, traitProcessors);
-        var generator = new GenerationExecutor(request.filer());
 
         // Execute initializer
         var mapping = resolver.resolveShapeMap(model);
         processor.process(mapping);
-        generator.generate(mapping);
+        return mapping.generateFiles();
     }
+
 
     private void initExtensions() {
         pluginManager.loadPlugins();
