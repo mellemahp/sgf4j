@@ -11,9 +11,7 @@ java_library(
         # pulls in nullable annotation
         artifact("com.google.code.findbugs:jsr305"),
         artifact("com.squareup:javapoet"),
-        artifact("software.amazon.smithy:smithy-model"),
-        artifact("org.pf4j:pf4j"),
-
+        artifact("software.amazon.smithy:smithy-model")
     ],
     javacopts = JAVAC_OPTS,
     visibility = ["//visibility:public"],

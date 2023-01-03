@@ -1,7 +1,7 @@
-package com.hmellema.sgf4j.core.shapegenerator.providers;
+package com.hmellema.sgf4j.gendata.providers;
 
-import com.hmellema.sgf4j.core.mapping.ShapeGeneratorMap;
-import com.hmellema.sgf4j.core.shapegenerator.methodgenerators.FieldAssociatedMethodSpecGenerator;
+import com.hmellema.sgf4j.gendata.methodgenerators.FieldAssociatedMethodSpecGenerator;
+import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
@@ -11,7 +11,7 @@ import java.util.Collection;
 public interface FieldProvider {
     // Returns a field spec to represent this shape as a field in another shape
     // A shape is included as field when it is a member of another shape
-    FieldSpec asField(String fieldName, ShapeGeneratorMap shapeGeneratorMap);
+    FieldSpec asField(String fieldName, ShapeGenMetadataMap shapeGeneratorMap);
 
     default Collection<MethodSpec> getClassAssociatedMethods(FieldSpec fieldSpec) {
         return getFieldAssociatedMethodGenerators().stream()

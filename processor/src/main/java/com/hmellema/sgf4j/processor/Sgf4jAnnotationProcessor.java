@@ -2,11 +2,9 @@ package com.hmellema.sgf4j.processor;
 
 import com.google.auto.service.AutoService;
 import com.hmellema.sgf4j.annotations.Sgf4j;
-import com.hmellema.sgf4j.core.DefaultCodeGenerator;
-import com.hmellema.sgf4j.core.api.Sgf4jGenerationRequest;
-import com.hmellema.sgf4j.core.api.Sgf4jGenerator;
-import com.hmellema.sgf4j.core.generator.exceptions.GenerationException;
-import com.hmellema.sgf4j.core.util.ModelLoader;
+import com.hmellema.sgf4j.api.Sgf4jGenerationRequest;
+import com.hmellema.sgf4j.api.Sgf4jGenerator;
+import com.hmellema.sgf4j.util.ModelLoader;
 import com.hmellema.sgf4j.processor.exceptions.FailToLoadAstException;
 import com.squareup.javapoet.JavaFile;
 import software.amazon.smithy.model.transform.ModelTransformer;
@@ -29,14 +27,11 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
     private Filer filer;
     private Messager messager;
 
-    private Sgf4jGenerator codeGenerator;
-
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
         messager = processingEnv.getMessager();
         filer = processingEnv.getFiler();
-        codeGenerator = new DefaultCodeGenerator();
         messager.printMessage(Diagnostic.Kind.NOTE,
                 "initialized processor: " + this.getClass().getSimpleName() + "...");
     }
@@ -52,7 +47,7 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
             return false;
         }
         final Sgf4jGenerationRequest request = extractRequestFromAnnotation(getAnnotation(elements));
-        var javaFiles = codeGenerator.generate(request);
+        var javaFiles = Sgf4jGenerator.generate(request);
         messager.printMessage(Diagnostic.Kind.NOTE, "Model Processed. Writing files.");
         javaFiles.forEach(this::writeFile);
         messager.printMessage(Diagnostic.Kind.NOTE,
@@ -71,14 +66,14 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
         var unfilteredModel = ModelLoader.load(getSmithyFileResourceURL(annotation.astPath()));
         var filteredModel = ModelTransformer.create().getModelWithoutTraitShapes(unfilteredModel);
 
-        return new Sgf4jGenerationRequest(filteredModel, Arrays.stream(annotation.filters()).toList());
+        return new Sgf4jGenerationRequest(filteredModel, this.getClass().getClassLoader(), Arrays.stream(annotation.filters()).toList());
     }
 
     private void writeFile(JavaFile generatedFile) {
         try {
             generatedFile.writeTo(filer);
         } catch (IOException e) {
-            throw new GenerationException("Code generation failed for Java file" + generatedFile, e);
+            throw new RuntimeException("Code generation failed for Java file" + generatedFile, e);
         }
     }
 

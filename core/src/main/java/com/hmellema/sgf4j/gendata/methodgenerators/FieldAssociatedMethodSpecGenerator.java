@@ -1,4 +1,4 @@
-package com.hmellema.sgf4j.core.shapegenerator.methodgenerators;
+package com.hmellema.sgf4j.gendata.methodgenerators;
 
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;

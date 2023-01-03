@@ -1,4 +1,4 @@
-package com.hmellema.sgf4j.core.shapegenerator.providers;
+package com.hmellema.sgf4j.gendata.providers;
 
 import com.squareup.javapoet.TypeName;
 

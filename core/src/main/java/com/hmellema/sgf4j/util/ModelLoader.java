@@ -1,4 +1,4 @@
-package com.hmellema.sgf4j.core.util;
+package com.hmellema.sgf4j.util;
 
 import software.amazon.smithy.model.Model;
 
