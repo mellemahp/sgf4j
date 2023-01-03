@@ -10,10 +10,10 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import java.util.*;
 
 public class ShapeGenLoader {
+    private static final Model PRELUDE = SmithyPreludeLoader.getPrelude();
+
     private final EnumMap<ShapeType, Resolver> resolvers = new EnumMap<>(ShapeType.class);
     private final List<Processor> processors = new ArrayList<>();
-
-    private static final Model PRELUDE = SmithyPreludeLoader.getPrelude();
     private final ShapeGenMetadataMap shapeGenDataMap = new ShapeGenMetadataMap();
     private final Model model;
 
