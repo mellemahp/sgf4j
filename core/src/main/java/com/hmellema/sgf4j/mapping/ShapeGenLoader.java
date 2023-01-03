@@ -1,6 +1,7 @@
 package com.hmellema.sgf4j.mapping;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
+import com.hmellema.sgf4j.util.SmithyPreludeLoader;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeId;
@@ -9,16 +10,17 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import java.util.*;
 
 public class ShapeGenLoader {
-
     private final EnumMap<ShapeType, Resolver> resolvers = new EnumMap<>(ShapeType.class);
     private final List<Processor> processors = new ArrayList<>();
 
+    private static final Model PRELUDE = SmithyPreludeLoader.getPrelude();
     private final ShapeGenMetadataMap shapeGenDataMap = new ShapeGenMetadataMap();
     private final Model model;
 
     public ShapeGenLoader(Model model) {
         Objects.requireNonNull(model, "model cannot be null.");
-        this.model = model;
+        // Merge the prelude with the existing model
+        this.model = model.toBuilder().addShapes(PRELUDE).build();
     }
 
     public ShapeGenMetadataMap resolve() {
