@@ -5,6 +5,7 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 
+import java.util.Collections;
 import java.util.Set;
 
 public interface Resolver {
@@ -14,7 +15,9 @@ public interface Resolver {
      */
     ShapeType getSupportedShapeType();
 
-    Set<ShapeId> getDependentShapes(Shape shape);
+    default Set<ShapeId> getDependentShapes(Shape shape) {
+        return Collections.emptySet();
+    }
 
     ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap);
 }
