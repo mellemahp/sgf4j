@@ -5,6 +5,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,32 +13,55 @@ import java.util.Optional;
 public interface ClassProvider {
     // Some shapes can be represented as a standalone class
     // Shapes that cannot be represented as a standalone class should return Optional.empty()
-    Optional<TypeSpec> asClass();
+    default Optional<TypeSpec> asClass() {
+        return Optional.empty();
+    }
 
     // All methods associated with this shape when used as a standalone class
-    List<MethodSpec> getClassAssociatedMethods();
+    // Not all shapes can have these methods
+    default List<MethodSpec> getClassAssociatedMethods() {
+        return Collections.emptyList();
+    }
 
-    void addClassAssociatedMethod(MethodSpec methodSpec);
+    default void addClassAssociatedMethod(MethodSpec methodSpec) {
+        throw new UnsupportedOperationException("addClassAssociatedMethod not defined for this metadata object");
+    }
 
     // Annotations associated with the shape when created as a standalone class
-    List<AnnotationSpec> getClassAnnotations();
+    default List<AnnotationSpec> getClassAnnotations() {
+        return Collections.emptyList();
+    }
 
-    void addClassAnnotation(AnnotationSpec annotationSpec);
+    default void addClassAnnotation(AnnotationSpec annotationSpec) {
+        throw new UnsupportedOperationException("addClassAnnotation not defined for this metadata object");
+    }
 
     // Class to extend when represented as a class
-    Optional<TypeName> getParentClassType();
+    default Optional<TypeName> getParentClassType() {
+        return Optional.empty();
+    }
 
-    void setParentClassType(TypeName parentClassType);
+    default void setParentClassType(TypeName parentClassType) {
+        throw new UnsupportedOperationException("setParentClassType not defined for this metadata object");
+    }
 
     // Classes that are nested in the type when the type is generated as a standalone class
     // for example, a builder class.
-    List<TypeSpec> getNestedClasses();
+    default List<TypeSpec> getNestedClasses() {
+        return Collections.emptyList();
+    }
 
-    void addNestedClass(TypeSpec nestedClass);
+    default void addNestedClass(TypeSpec nestedClass) {
+        throw new UnsupportedOperationException("addNestedClass not defined for this metadata object");
+    }
 
     // Get the types of each member field <Field name, TypeSpec>
-    Map<String, TypeName> getFieldTypes();
+    default Map<String, TypeName> getFieldTypes() {
+        return Collections.emptyMap();
+    }
 
     // allows modification of member field
-    void putFieldType(String fieldName, TypeName typeName);
+    default void putFieldType(String fieldName, TypeName typeName)  {
+        throw new UnsupportedOperationException("putFieldType not defined for this metadata object");
+    }
 }

@@ -11,7 +11,6 @@ import java.util.*;
 
 public class ShapeGenLoader {
     private static final Model PRELUDE = SmithyPreludeLoader.getPrelude();
-
     private final EnumMap<ShapeType, Resolver> resolvers = new EnumMap<>(ShapeType.class);
     private final List<Processor> processors = new ArrayList<>();
     private final ShapeGenMetadataMap shapeGenDataMap = new ShapeGenMetadataMap();
