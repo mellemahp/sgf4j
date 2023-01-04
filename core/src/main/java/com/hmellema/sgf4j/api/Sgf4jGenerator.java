@@ -44,7 +44,7 @@ public interface Sgf4jGenerator {
      */
     static List<JavaFile> generate(ShapeGenMetadataMap shapeGenMetadataMap) {
         return shapeGenMetadataMap.values().stream()
-                .map(Sgf4jGenerator::generate)
+                .map(shapeGenMetadata -> Sgf4jGenerator.generate(shapeGenMetadata, shapeGenMetadataMap))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .toList();
@@ -55,8 +55,8 @@ public interface Sgf4jGenerator {
      * @param shapeGenMetadata input shape metadata
      * @return Optional of the generated {@link JavaFile}. If the shape does not represent a standalone java class this should return Optional.empty
      */
-    static Optional<JavaFile> generate(ShapeGenMetadata shapeGenMetadata) {
-        var typeOptional = shapeGenMetadata.asClass();
+    static Optional<JavaFile> generate(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+        var typeOptional = shapeGenMetadata.asClass(shapeGenMetadataMap);
 
         if (typeOptional.isPresent()) {
             final JavaFile.Builder fileBuilder = JavaFile.builder(shapeGenMetadata.getNameSpace(), typeOptional.get());

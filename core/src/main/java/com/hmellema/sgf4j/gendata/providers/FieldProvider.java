@@ -5,7 +5,6 @@ import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface FieldProvider {
