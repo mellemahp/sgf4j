@@ -8,9 +8,7 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import java.util.EnumSet;
 import java.util.Objects;
 
-public abstract class ShapeGenMetadata implements
-        JavaFileProvider, ClassProvider, FieldProvider, ParameterProvider, TypeProvider
-{
+public abstract class ShapeGenMetadata implements JavaFileProvider, ClassProvider, FieldProvider, TypeProvider {
     private final Shape shape;
 
     protected ShapeGenMetadata(Shape shape, EnumSet<ShapeType> allowedShapeTypes) {
