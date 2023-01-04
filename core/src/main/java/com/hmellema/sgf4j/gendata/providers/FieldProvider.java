@@ -11,7 +11,9 @@ import java.util.Collection;
 public interface FieldProvider {
     // Returns a field spec to represent this shape as a field in another shape
     // A shape is included as field when it is a member of another shape
-    FieldSpec asField(String fieldName, ShapeGenMetadataMap shapeGeneratorMap);
+    default FieldSpec asField(String fieldName, ShapeGenMetadataMap shapeGeneratorMap) {
+        throw new UnsupportedOperationException("asField not defined for this metadata object");
+    }
 
     default Collection<MethodSpec> getClassAssociatedMethods(FieldSpec fieldSpec) {
         return getFieldAssociatedMethodGenerators().stream()

@@ -10,6 +10,7 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import java.util.*;
 
 public class ShapeGenLoader {
+    private static final String ALL_TRAITS = "*";
     private static final Model PRELUDE = SmithyPreludeLoader.getPrelude();
     private final EnumMap<ShapeType, Resolver> resolvers = new EnumMap<>(ShapeType.class);
     private final List<Processor> processors = new ArrayList<>();
@@ -86,10 +87,14 @@ public class ShapeGenLoader {
 
     private void executeProcessors(ShapeGenMetadata shapeGenMetadata) {
         processors.stream()
-                .filter(processor -> processor.getSupportedShapeTypes().contains(shapeGenMetadata.getShapeType().toString())
-                        || processor.getSupportedShapeTypes().contains(Processor.ALL)
-                ).filter(processor -> processor.getSupportedShapeTypes().contains(shapeGenMetadata.getShapeType().toString())
-                        || processor.getSupportedTraitNames().contains(Processor.ALL)
-                ).forEach(processor -> processor.process(shapeGenMetadata));
+                .filter(processor -> processor.getSupportedShapeTypes().contains(shapeGenMetadata.getShapeType()))
+                .filter(processor -> shapeHasProcessorSupportedTrait(processor, shapeGenMetadata.getShape()))
+                .forEach(processor -> processor.process(shapeGenMetadata));
+    }
+
+    private boolean shapeHasProcessorSupportedTrait(Processor processor, Shape shape) {
+        return processor.getSupportedTraitNames().contains(ALL_TRAITS) ||
+                processor.getSupportedTraitNames().stream()
+                        .anyMatch(shape::hasTrait);
     }
 }
