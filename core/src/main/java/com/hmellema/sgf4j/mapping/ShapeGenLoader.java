@@ -41,7 +41,7 @@ public class ShapeGenLoader {
 
     public void resolve(ShapeId shapeId) {
         // if the entry does not exists, resolve it
-        if (shapeGenDataMap.get(shapeId) == null) {
+        if (shapeGenDataMap.get(shapeId).isEmpty()) {
             // get the shape data from the smithy model
             var shape = model.getShape(shapeId).orElseThrow(
                     () -> new IllegalStateException("ShapeId " + shapeId + " could not be found in model")

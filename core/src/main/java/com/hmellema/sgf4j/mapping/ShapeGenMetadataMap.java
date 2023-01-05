@@ -8,11 +8,9 @@ import java.util.*;
 public class ShapeGenMetadataMap {
     private final Map<ShapeId, ShapeGenMetadata> shapeGenDataMap = new HashMap<>();
 
-    public ShapeGenMetadata get(ShapeId shapeId) {
+    public Optional<ShapeGenMetadata> get(ShapeId shapeId) {
         // We throw an error if the code generation tries to access a non-existant shape
-        return Optional.ofNullable(shapeGenDataMap.get(shapeId)).orElseThrow(
-                () -> new IllegalStateException("Tried to access unresolved shape: " + shapeId)
-        );
+        return Optional.ofNullable(shapeGenDataMap.get(shapeId));
     }
 
     void put(ShapeId shapeId, ShapeGenMetadata metadata) {
