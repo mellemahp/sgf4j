@@ -66,6 +66,7 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
         var unfilteredModel = ModelLoader.load(getSmithyFileResourceURL(annotation.astPath()));
         var filteredModel = ModelTransformer.create().getModelWithoutTraitShapes(unfilteredModel);
         var classLoader = Sgf4jAnnotationProcessor.class.getClassLoader();
+        System.out.println("PACKAGES " + Arrays.toString(classLoader.getDefinedPackages()));
         return new Sgf4jGenerationRequest(filteredModel, classLoader, Arrays.stream(annotation.filters()).toList());
     }
 
