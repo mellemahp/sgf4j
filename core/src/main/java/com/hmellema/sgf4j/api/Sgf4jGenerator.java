@@ -1,5 +1,6 @@
 package com.hmellema.sgf4j.api;
 
+import com.hmellema.sgf4j.extension.CodeGenExtension;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.mapping.ShapeGenLoader;
 import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
@@ -8,6 +9,7 @@ import com.squareup.javapoet.JavaFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public interface Sgf4jGenerator {
     /** Generates java files from a model
@@ -18,6 +20,7 @@ public interface Sgf4jGenerator {
     static List<JavaFile> generate(Sgf4jGenerationRequest request) {
         var shapeGenLoader = new ShapeGenLoader(request.model());
         var extensions = ExtensionLoader.load(request.classLoader());
+        System.out.println("Code Generator loaded: " + extensions.stream().map(CodeGenExtension::getName).toList());
         for (var extension : extensions) {
             if (nonNullOrEmpty(extension.getResolvers())) {
                 shapeGenLoader.registerAllResolvers(extension.getResolvers());
