@@ -9,7 +9,6 @@ import com.squareup.javapoet.JavaFile;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public interface Sgf4jGenerator {
     /** Generates java files from a model
