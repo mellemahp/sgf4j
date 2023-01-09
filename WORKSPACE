@@ -1,9 +1,26 @@
-workspace(name = "commentator")
+workspace(name = "sgf4j")
 
 #######################
 # Base bazel tool imports
 #######################
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+#######################
+# Setup Smithy Rules
+#######################
+SMITHY_RULES_TAG = "2.2.0"
+
+SMITHY_RULES_SHA = "ff27ddba56792be7d80697151176089db1d5685a16ed7514dcc66c67fc51b616"
+
+http_archive(
+    name = "smithy_rules",
+    sha256 = SMITHY_RULES_SHA,
+    url = "https://github.com/mellemahp/smithy-bazel-rules/releases/download/%s/release.tar" % SMITHY_RULES_TAG,
+)
+
+load("@smithy_rules//smithy:deps.bzl", "smithy_cli_init")
+
+smithy_cli_init()
 
 #######################
 # Java Library Imports
@@ -37,36 +54,5 @@ load("//:dependencies.bzl", "JAVA_DEPENDENCIES", "MAVEN_REPOS")
 maven_install(
     name = "maven",
     artifacts = JAVA_DEPENDENCIES,
-    repositories = MAVEN_REPOS,
-)
-
-#######
-# PMD #
-#######
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-
-rules_pmd_version="0.2.0"
-rules_pmd_sha="54b76b07b32c10886d50af52188a1410ec95e046f0425ad23c484e9d8de3b7f7"
-
-http_archive(
-    name = "rules_pmd",
-    sha256 = rules_pmd_sha,
-    strip_prefix = "bazel_rules_pmd-{v}".format(v = rules_pmd_version),
-    url = "https://github.com/buildfoundation/bazel_rules_pmd/archive/v{v}.tar.gz".format(v = rules_pmd_version),
-)
-
-load("@rules_pmd//pmd:dependencies.bzl", "rules_pmd_dependencies")
-rules_pmd_dependencies()
-
-load("@rules_pmd//pmd:toolchains.bzl", "rules_pmd_toolchains")
-rules_pmd_toolchains()
-
-#############
-# Test Deps #
-#############
-load("//:dependencies.bzl", "JAVA_TEST_DEPENDENCIES")
-maven_install(
-    name = "maven_test",
-    artifacts = JAVA_TEST_DEPENDENCIES,
     repositories = MAVEN_REPOS,
 )
