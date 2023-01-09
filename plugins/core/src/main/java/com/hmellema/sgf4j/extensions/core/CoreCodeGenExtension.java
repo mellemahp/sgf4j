@@ -1,29 +1,15 @@
 package com.hmellema.sgf4j.extensions.core;
 
-import com.google.auto.service.AutoService;
 import com.hmellema.sgf4j.extension.CodeGenExtension;
-import com.hmellema.sgf4j.extensions.core.resolvers.BigDecimalResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.BigIntegerResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.BlobResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.BooleanResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.ByteResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.DocumentResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.DoubleResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.EnumResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.FloatResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.IntEnumResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.IntegerResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.ListResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.MapResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.MemberResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.OperationResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.ResourceResolver;
-import com.hmellema.sgf4j.extensions.core.resolvers.ServiceResolver;
+import com.hmellema.sgf4j.extensions.core.resolvers.*;
 import com.hmellema.sgf4j.mapping.Processor;
 import com.hmellema.sgf4j.mapping.Resolver;
+import org.pf4j.Extension;
+
+import java.util.Collections;
 import java.util.List;
 
-@AutoService(CodeGenExtension.class)
+@Extension
 public class CoreCodeGenExtension implements CodeGenExtension {
   private static final String EXTENSION_NAME = "core";
   private static final List<Resolver> RESOLVER_LIST= List.of(
@@ -43,7 +29,10 @@ public class CoreCodeGenExtension implements CodeGenExtension {
       new MemberResolver(),
       new OperationResolver(),
       new ResourceResolver(),
-      new ServiceResolver()
+      new ServiceResolver(),
+      new StructureResolver(),
+      new StringResolver(),
+      new TimeStampResolver()
   );
 
   @Override
@@ -58,6 +47,6 @@ public class CoreCodeGenExtension implements CodeGenExtension {
 
   @Override
   public List<Processor> getProcessors() {
-    return null;
+    return Collections.emptyList();
   }
 }

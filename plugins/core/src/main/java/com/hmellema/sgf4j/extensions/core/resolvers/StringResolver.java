@@ -9,7 +9,7 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public class StringResolver implements Resolver {
-  private static final ShapeType SUPPORTED_SHAPE_TYPE = ShapeType.SHORT;
+  private static final ShapeType SUPPORTED_SHAPE_TYPE = ShapeType.STRING;
   private static final TypeName STRING_TYPE_NAME = TypeName.get(String.class);
 
   @Override

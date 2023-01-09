@@ -14,9 +14,3 @@ java_library(
     neverlink = True,
     visibility = ["//visibility:public"],
 )
-
-filegroup(
-    name = "pmd-rulesets",
-    srcs = ["pmd-rulesets.xml"],
-    visibility = ["//:__subpackages__"]
-)

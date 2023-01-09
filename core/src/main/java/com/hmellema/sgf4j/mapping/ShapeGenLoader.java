@@ -66,7 +66,6 @@ public class ShapeGenLoader {
         }
     }
 
-
     public void registerAllResolvers(List<Resolver> resolverList) {
         resolverList.forEach(this::registerResolver);
     }
@@ -74,6 +73,7 @@ public class ShapeGenLoader {
     public void registerResolver(Resolver resolver) {
         // TODO: add logging if resolver is overridden
         resolvers.put(resolver.getSupportedShapeType(), resolver);
+        System.out.println("RESOLVER REGISTERED FOR: " + resolver.getSupportedShapeType());
     }
 
     public void registerAllProcessors(List<Processor> processorList) {

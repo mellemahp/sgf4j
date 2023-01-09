@@ -26,10 +26,9 @@ JAVA_DEPENDENCIES = [
     "com.google.auto.service:auto-service-annotations:1.0.1",
     ####### smithy ########
     "software.amazon.smithy:smithy-model:%s" % SMITHY_VERSION,
-]
-
-#############################
-#     TEST DEPENDENCIES     #
-#############################
-JAVA_TEST_DEPENDENCIES = [
+    ####### plugins #######
+    'org.pf4j:pf4j:3.8.0',
+    ####### logging #######
+    "org.slf4j:slf4j-api:2.0.6",
+    "ch.qos.logback:logback-classic:1.4.5"
 ]

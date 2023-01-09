@@ -1,6 +1,5 @@
 load("//:constants.bzl", "JAVAC_OPTS")
 load("@rules_jvm_external//:defs.bzl", "artifact")
-load("@rules_pmd//pmd:defs.bzl", "pmd")
 
 java_library(
     name = "sgf4j-core",
@@ -11,14 +10,9 @@ java_library(
         # pulls in nullable annotation
         artifact("com.google.code.findbugs:jsr305"),
         artifact("com.squareup:javapoet"),
-        artifact("software.amazon.smithy:smithy-model")
+        artifact("software.amazon.smithy:smithy-model"),
+        artifact("org.pf4j:pf4j")
     ],
     javacopts = JAVAC_OPTS,
-    visibility = ["//visibility:public"],
-)
-
-pmd(
-    name = "pmd_analysis",
-    srcs =  glob(["src/main/**/*.java"]),
-    rulesets = ["//:pmd-rulesets"],
+    visibility = ["//visibility:public"]
 )

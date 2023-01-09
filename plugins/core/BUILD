@@ -1,22 +1,28 @@
 load("//plugins:constants.bzl", "JAVAC_OPTS")
 load("@rules_jvm_external//:defs.bzl", "artifact")
 
-java_library(
-    name = "anvil-plugin-core",
+java_binary(
+    name = "sgf4j-plugin-core",
     srcs = glob(["src/main/java/com/hmellema/**/*.java"]),
     javacopts = JAVAC_OPTS,
-    plugins = ["//plugins:google_auto_service_plugin"],
+    plugins = ["//plugins:pf4j_plugin"],
     visibility = ["//visibility:public"],
     deps = [
         "//plugins:nullaway",
         # pulls in nullable annotation
         artifact("com.google.code.findbugs:jsr305"),
-        "@sgf4j//core:sgf4j-core",
+        "//core:sgf4j-core",
+        # core codegen deps
         artifact("com.squareup:javapoet"),
         artifact("software.amazon.smithy:smithy-model"),
-        artifact("org.apache.commons:commons-lang3"),
-        # TODO: move to its own module
-        artifact("com.fasterxml.jackson.core:jackson-annotations"),
-        artifact("com.google.auto.service:auto-service-annotations")
+        #artifact("com.google.auto.service:auto-service-annotations"),
+        artifact("org.pf4j:pf4j")
     ],
+    deploy_manifest_lines = [
+          "Plugin-Class: com.hmellema.sgf4j.extensions.core.CorePlugin",
+          "Plugin-Id: core-plugin",
+          "Plugin-Provider: Hunter Mellema",
+          "Plugin-Version: 0.0.1"
+    ],
+    main_class = "does.not.exist",
 )

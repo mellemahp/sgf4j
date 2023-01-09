@@ -12,7 +12,7 @@ public interface JavaFileProvider {
         throw new UnsupportedOperationException("putStaticImport not defined for this metadata object");
     }
 
-    default Optional<String> getFileComment() {
+    default Optional<String> getFileTest() {
         return Optional.empty();
     }
 

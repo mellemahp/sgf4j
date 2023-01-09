@@ -1,0 +1,23 @@
+{
+  "version": "2.0",
+  "projections": {
+    "model": {
+      "transforms": [
+        {
+          "name": "removeUnusedShapes",
+          "args": {}
+        },
+        {
+          "name": "excludeMetadata",
+          "args": {
+            "keys": [
+              "validators",
+              "suppressions"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "smithy" : "2.0"
+}

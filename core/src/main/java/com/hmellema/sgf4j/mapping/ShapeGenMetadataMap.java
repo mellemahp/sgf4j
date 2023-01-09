@@ -14,6 +14,7 @@ public class ShapeGenMetadataMap {
     }
 
     void put(ShapeId shapeId, ShapeGenMetadata metadata) {
+        System.out.println("Resolved Shape!: " + metadata.getShapeId());
         Optional.ofNullable(shapeGenDataMap.put(shapeId, metadata)).ifPresent(existingShape -> {
             throw new IllegalStateException("Existing shape " + existingShape + " was overwritten during resolution. This is not permitted.");
         });

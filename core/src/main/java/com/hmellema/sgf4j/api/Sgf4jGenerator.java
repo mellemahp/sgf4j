@@ -6,6 +6,8 @@ import com.hmellema.sgf4j.mapping.ShapeGenLoader;
 import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.hmellema.sgf4j.util.ExtensionLoader;
 import com.squareup.javapoet.JavaFile;
+import org.pf4j.JarPluginManager;
+import org.pf4j.PluginManager;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +20,8 @@ public interface Sgf4jGenerator {
      */
     static List<JavaFile> generate(Sgf4jGenerationRequest request) {
         var shapeGenLoader = new ShapeGenLoader(request.model());
-        var extensions = ExtensionLoader.load(request.classLoader());
+        var extensions = ExtensionLoader.load();
+
         System.out.println("Code Generator loaded: " + extensions.stream().map(CodeGenExtension::getName).toList());
         for (var extension : extensions) {
             if (nonNullOrEmpty(extension.getResolvers())) {
@@ -63,8 +66,8 @@ public interface Sgf4jGenerator {
         if (typeOptional.isPresent()) {
             final JavaFile.Builder fileBuilder = JavaFile.builder(shapeGenMetadata.getNameSpace(), typeOptional.get());
 
-            // Add any comments for the overall class
-            shapeGenMetadata.getFileComment().ifPresent(fileBuilder::addFileComment);
+            // Add any Tests for the overall class
+            shapeGenMetadata.getFileTest().ifPresent(fileBuilder::addFileComment);
 
             // Add any static imports to the top of the file
             if (!shapeGenMetadata.getStaticImports().isEmpty()) {

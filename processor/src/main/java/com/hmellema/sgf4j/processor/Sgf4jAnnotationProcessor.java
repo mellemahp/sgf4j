@@ -4,6 +4,8 @@ import com.google.auto.service.AutoService;
 import com.hmellema.sgf4j.annotations.Sgf4j;
 import com.hmellema.sgf4j.api.Sgf4jGenerationRequest;
 import com.hmellema.sgf4j.api.Sgf4jGenerator;
+import com.hmellema.sgf4j.extension.CodeGenExtension;
+import com.hmellema.sgf4j.util.ExtensionLoader;
 import com.hmellema.sgf4j.util.ModelLoader;
 import com.hmellema.sgf4j.processor.exceptions.FailToLoadAstException;
 import com.squareup.javapoet.JavaFile;
@@ -46,9 +48,11 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
             }
             return false;
         }
+
         final Sgf4jGenerationRequest request = extractRequestFromAnnotation(getAnnotation(elements));
+        messager.printMessage(Diagnostic.Kind.NOTE, "Smithy AST loaded. Generating Java files...");
         var javaFiles = Sgf4jGenerator.generate(request);
-        messager.printMessage(Diagnostic.Kind.NOTE, "Model Processed. Writing files.");
+        messager.printMessage(Diagnostic.Kind.NOTE, "Java files generated. Writing files...");
         javaFiles.forEach(this::writeFile);
         messager.printMessage(Diagnostic.Kind.NOTE,
                 "Annotation processor " + this.getClass().getSimpleName() + " finished processing.");
@@ -65,8 +69,7 @@ public class Sgf4jAnnotationProcessor extends AbstractProcessor {
     private Sgf4jGenerationRequest extractRequestFromAnnotation(final Sgf4j annotation) {
         var unfilteredModel = ModelLoader.load(getSmithyFileResourceURL(annotation.astPath()));
         var filteredModel = ModelTransformer.create().getModelWithoutTraitShapes(unfilteredModel);
-        var classLoader = Sgf4jAnnotationProcessor.class.getClassLoader();
-        return new Sgf4jGenerationRequest(filteredModel, classLoader, Arrays.stream(annotation.filters()).toList());
+        return new Sgf4jGenerationRequest(filteredModel, Arrays.stream(annotation.filters()).toList());
     }
 
     private void writeFile(JavaFile generatedFile) {
