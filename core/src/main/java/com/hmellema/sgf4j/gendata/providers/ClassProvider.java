@@ -1,10 +1,7 @@
 package com.hmellema.sgf4j.gendata.providers;
 
 import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -56,13 +53,12 @@ public interface ClassProvider {
         throw new UnsupportedOperationException("addNestedClass not defined for this metadata object");
     }
 
-    // Get the types of each member field <Field name, TypeSpec>
-    default Map<String, TypeName> getFieldTypes() {
-        return Collections.emptyMap();
+    default List<FieldSpec> getAdditionalClassFields() {
+        return Collections.emptyList();
     }
 
-    // allows modification of member field
-    default void putFieldType(String fieldName, TypeName typeName)  {
-        throw new UnsupportedOperationException("putFieldType not defined for this metadata object");
+    default void addAdditionalClassField(FieldSpec fieldSpec) {
+        throw new UnsupportedOperationException("addAdditionalClassField not defined for this metadata object");
     }
+
 }

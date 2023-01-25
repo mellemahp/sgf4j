@@ -3,9 +3,9 @@ $version: "2.0"
 namespace com.example.operations
 
 use com.example#NotFoundError
+use com.hmellema.sgf4j.extensions#UUID
 use com.example#InternalError
 
-use com.example#Uuid
 
 @http(
     method: "POST",
@@ -24,13 +24,13 @@ operation TestOperation {
 structure TestOperationInput {
     @required
     @httpLabel
-    TestId: Uuid
+    TestId: UUID
 }
 
 @output
 structure TestOperationOutput {
     @required
-    commentId: Uuid,
+    commentId: UUID,
 
     test: TestEnum
 }

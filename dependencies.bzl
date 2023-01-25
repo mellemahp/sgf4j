@@ -13,6 +13,8 @@ MAVEN_REPOS = [
 NULLAWAY_VERSION = "0.10.2"
 FINDBUGS_VERSION = "3.0.2"
 SMITHY_VERSION = "1.26.4"
+JACKSON_VERSION = "2.14.1"
+
 
 JAVA_DEPENDENCIES = [
     ###### PLUGIN/ANNOTATION PROCESSOR DEPS #####
@@ -30,5 +32,11 @@ JAVA_DEPENDENCIES = [
     'org.pf4j:pf4j:3.8.0',
     ####### logging #######
     "org.slf4j:slf4j-api:2.0.6",
-    "ch.qos.logback:logback-classic:1.4.5"
+    "ch.qos.logback:logback-classic:1.4.5",
+    ##### for string utils ####
+    "org.apache.commons:commons-lang3:3.12.0",
+    ##### bean validation ####
+    "jakarta.validation:jakarta.validation-api:3.0.2",
+    #### jackson annotations ####
+    "com.fasterxml.jackson.core:jackson-annotations:%s" % JACKSON_VERSION,
 ]

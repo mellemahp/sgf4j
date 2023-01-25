@@ -6,8 +6,8 @@ build --watchfs
 
 # Set shorter timeout to kill processes
 build --local_termination_grace_seconds=3
-build --strategy=BundlingTypes=remote,sandboxed,local
-build --spawn_strategy=local
+# build --strategy=BundlingTypes=remote,sandboxed,local
+build --spawn_strategy=sandboxed
 
 ##################################
 # Set java language to jdk 17    #

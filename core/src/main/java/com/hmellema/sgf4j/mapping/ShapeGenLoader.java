@@ -59,7 +59,7 @@ public class ShapeGenLoader {
             var shapeMetada = resolver.resolve(shape, shapeGenDataMap);
 
             // Execute processors on resolved shape
-            executeProcessors(shapeMetada);
+            executeProcessors(shapeMetada, shapeGenDataMap);
 
             // Save resolved shape to the map
             shapeGenDataMap.put(shapeId, shapeMetada);
@@ -73,7 +73,6 @@ public class ShapeGenLoader {
     public void registerResolver(Resolver resolver) {
         // TODO: add logging if resolver is overridden
         resolvers.put(resolver.getSupportedShapeType(), resolver);
-        System.out.println("RESOLVER REGISTERED FOR: " + resolver.getSupportedShapeType());
     }
 
     public void registerAllProcessors(List<Processor> processorList) {
@@ -85,11 +84,11 @@ public class ShapeGenLoader {
         processors.add(processor);
     }
 
-    private void executeProcessors(ShapeGenMetadata shapeGenMetadata) {
+    private void executeProcessors(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
         processors.stream()
                 .filter(processor -> processor.getSupportedShapeTypes().contains(shapeGenMetadata.getShapeType()))
                 .filter(processor -> shapeHasProcessorSupportedTrait(processor, shapeGenMetadata.getShape()))
-                .forEach(processor -> processor.process(shapeGenMetadata));
+                .forEach(processor -> processor.process(shapeGenMetadata, shapeGenMetadataMap));
     }
 
     private boolean shapeHasProcessorSupportedTrait(Processor processor, Shape shape) {

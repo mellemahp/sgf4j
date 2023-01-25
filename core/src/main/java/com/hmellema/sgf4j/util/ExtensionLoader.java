@@ -13,8 +13,6 @@ public interface ExtensionLoader {
         pluginManager.loadPlugins();
         pluginManager.startPlugins();
         var extensions = pluginManager.getExtensions(CodeGenExtension.class);
-        System.out.println(extensions);
-
         pluginManager.stopPlugins();
         return extensions;
     }

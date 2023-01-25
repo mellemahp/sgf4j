@@ -9,12 +9,10 @@ public class ShapeGenMetadataMap {
     private final Map<ShapeId, ShapeGenMetadata> shapeGenDataMap = new HashMap<>();
 
     public Optional<ShapeGenMetadata> get(ShapeId shapeId) {
-        // We throw an error if the code generation tries to access a non-existant shape
         return Optional.ofNullable(shapeGenDataMap.get(shapeId));
     }
 
     void put(ShapeId shapeId, ShapeGenMetadata metadata) {
-        System.out.println("Resolved Shape!: " + metadata.getShapeId());
         Optional.ofNullable(shapeGenDataMap.put(shapeId, metadata)).ifPresent(existingShape -> {
             throw new IllegalStateException("Existing shape " + existingShape + " was overwritten during resolution. This is not permitted.");
         });

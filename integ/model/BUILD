@@ -20,6 +20,7 @@ filegroup(
 smithy_ast(
     name = "ast_spec",
     srcs = [":model_files"],
+    deps = ["//plugins/friendly-id/model:friendly_id_smithy_lib"],
     config = SERVICE_BUILD_FILE,
     projection = "model"
 )

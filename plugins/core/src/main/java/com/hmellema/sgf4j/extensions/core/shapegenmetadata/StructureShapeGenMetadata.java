@@ -2,10 +2,8 @@ package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -25,9 +23,13 @@ public class StructureShapeGenMetadata extends ShapeGenMetadata {
   private final List<AnnotationSpec> classAnnotations = new ArrayList<>();
   private final List<MethodSpec> associatedMethods = new ArrayList<>();
 
+  private final List<TypeSpec> nestedClasses = new ArrayList<>();
+
   private TypeName typeName;
   private String nameSpace;
   private final String className;
+
+  private final List<FieldSpec> additionalFields = new ArrayList<>();
 
   private TypeName parentType;
 
@@ -105,6 +107,20 @@ public class StructureShapeGenMetadata extends ShapeGenMetadata {
         specBuilder.addMethod(associatedMethod);
       }
     }
+
+    // Add any additional class fields
+    for (var classField : getAdditionalClassFields()) {
+      specBuilder.addField(classField);
+    }
+
+    if (parentType != null) {
+      specBuilder.superclass(parentType);
+    }
+
+    for (var nestedClass : nestedClasses) {
+      specBuilder.addType(nestedClass);
+    }
+
     return Optional.of(specBuilder.build());
   }
 
@@ -142,11 +158,23 @@ public class StructureShapeGenMetadata extends ShapeGenMetadata {
 
   @Override
   public List<TypeSpec> getNestedClasses() {
-    return Collections.emptyList();
+    return nestedClasses;
   }
 
   @Override
   public void addNestedClass(TypeSpec nestedClass) {
-    throw new UnsupportedOperationException("unsupported");
+    Objects.requireNonNull(nestedClass, "nestedClass cannot be null.");
+    nestedClasses.add(nestedClass);
+  }
+
+  @Override
+  public List<FieldSpec> getAdditionalClassFields() {
+    return additionalFields;
+  }
+
+  @Override
+  public void addAdditionalClassField(FieldSpec fieldSpec) {
+    Objects.requireNonNull(fieldSpec, "fieldSpec cannot be null.");
+    additionalFields.add(fieldSpec);
   }
 }

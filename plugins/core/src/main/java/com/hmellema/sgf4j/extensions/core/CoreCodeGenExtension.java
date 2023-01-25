@@ -1,12 +1,12 @@
 package com.hmellema.sgf4j.extensions.core;
 
 import com.hmellema.sgf4j.extension.CodeGenExtension;
+import com.hmellema.sgf4j.extensions.core.processors.*;
 import com.hmellema.sgf4j.extensions.core.resolvers.*;
 import com.hmellema.sgf4j.mapping.Processor;
 import com.hmellema.sgf4j.mapping.Resolver;
 import org.pf4j.Extension;
 
-import java.util.Collections;
 import java.util.List;
 
 @Extension
@@ -32,7 +32,16 @@ public class CoreCodeGenExtension implements CodeGenExtension {
       new ServiceResolver(),
       new StructureResolver(),
       new StringResolver(),
-      new TimeStampResolver()
+      new TimeStampResolver(),
+      new UnionResolver()
+  );
+
+  private static final List<Processor> PROCESSOR_LIST = List.of(
+      new ErrorStructureProcessor(),
+      new ConstructorBuilderStructureProcessor(),
+      new GetterStructureProcessor(),
+      new GeneratedAnnotationProcessor(),
+      new ToStringStructureProcessor()
   );
 
   @Override
@@ -46,7 +55,5 @@ public class CoreCodeGenExtension implements CodeGenExtension {
   }
 
   @Override
-  public List<Processor> getProcessors() {
-    return Collections.emptyList();
-  }
+  public List<Processor> getProcessors() { return PROCESSOR_LIST; }
 }

@@ -2,9 +2,7 @@ $version: "2.0"
 
 namespace com.example
 
-@pattern("^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
-@length(min: 36, max: 36)
-string Uuid
+use com.hmellema.sgf4j.extensions#friendlyId
 
 @pattern("^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$")
 @length(min: 3, max: 36)

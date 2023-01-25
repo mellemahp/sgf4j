@@ -22,7 +22,6 @@ public interface Sgf4jGenerator {
         var shapeGenLoader = new ShapeGenLoader(request.model());
         var extensions = ExtensionLoader.load();
 
-        System.out.println("Code Generator loaded: " + extensions.stream().map(CodeGenExtension::getName).toList());
         for (var extension : extensions) {
             if (nonNullOrEmpty(extension.getResolvers())) {
                 shapeGenLoader.registerAllResolvers(extension.getResolvers());

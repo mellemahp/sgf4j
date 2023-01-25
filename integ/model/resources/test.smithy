@@ -5,13 +5,14 @@ namespace com.example.resources
 use com.example#NotFoundError
 use com.example#InternalError
 use com.example#SafeComment
-use com.example#Uuid
+use com.hmellema.sgf4j.extensions#FriendlyUUID
+use com.hmellema.sgf4j.extensions#UUID
 use com.example#UserName
 use com.example#CreationDate
 
 resource TestResource {
     identifiers: {
-        TestId: Uuid
+        TestId: UUID
     },
     create: CreateTest,
     delete: DeleteTest,
@@ -28,7 +29,7 @@ operation GetTestById {
     input := {
         @required
         @httpLabel
-        TestId: Uuid
+        TestId: UUID
     },
     output: GetTestByIdOutput,
     errors: [
@@ -40,16 +41,21 @@ operation GetTestById {
 @output
 structure GetTestByIdOutput {
     @required
-    TestId: Uuid,
+    TestId: UUID,
 
     @required
     createdBy: UserName,
 
     @required
-    Test: SafeComment,
+    test: MyStruct,
 
     @required
     creationDate: CreationDate,
+}
+
+union MyStruct {
+    comment: SafeComment,
+    other: UUID
 }
 
 @http(
@@ -76,14 +82,14 @@ structure CreateTestInput{
 }
 
 map MyMap {
-    key: Uuid,
+    key: UUID,
     value: Integer
 }
 
 @output
 structure CreateTestOutput {
     @required
-    TestId: Uuid,
+    TestId: UUID,
 
     @required
     createdBy: UserName,
@@ -113,13 +119,13 @@ operation DeleteTest {
 structure DeleteTestInput{
     @required
     @httpLabel
-    TestId: Uuid
+    TestId: UUID
 }
 
 @output
 structure DeleteTestOutput {
     @required
-    commentId: Uuid,
+    commentId: UUID,
 
     test: TestEnum
 }

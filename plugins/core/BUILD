@@ -15,8 +15,8 @@ java_binary(
         # core codegen deps
         artifact("com.squareup:javapoet"),
         artifact("software.amazon.smithy:smithy-model"),
-        #artifact("com.google.auto.service:auto-service-annotations"),
-        artifact("org.pf4j:pf4j")
+        artifact("org.pf4j:pf4j"),
+        artifact("org.apache.commons:commons-lang3")
     ],
     deploy_manifest_lines = [
           "Plugin-Class: com.hmellema.sgf4j.extensions.core.CorePlugin",
