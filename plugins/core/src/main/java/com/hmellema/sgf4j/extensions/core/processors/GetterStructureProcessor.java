@@ -28,7 +28,7 @@ public class GetterStructureProcessor implements Processor {
 
     @Override
     public void process(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
-        shapeGenMetadata.addFieldMethod(methodSpecGenerator(shapeGenMetadata.asField(shapeGenMetadataMap)));
+        shapeGenMetadata.addFieldMethod(methodSpecGenerator(shapeGenMetadata.asField()));
     }
 
     public MethodSpec methodSpecGenerator(FieldSpec fieldSpec) {

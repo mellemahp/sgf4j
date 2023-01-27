@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FieldProvider {
     // Returns a field spec to represent this shape as a field in another shape
-    default FieldSpec asField(ShapeGenMetadataMap shapeGeneratorMap) {
+    default FieldSpec asField() {
         throw new UnsupportedOperationException("asField not defined for this metadata object");
     }
 

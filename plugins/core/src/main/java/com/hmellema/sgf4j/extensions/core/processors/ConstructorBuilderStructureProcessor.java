@@ -88,7 +88,7 @@ public class ConstructorBuilderStructureProcessor implements Processor {
             // Add a field for the member type
             var memberData = shapeGenMetadataMap.get(member.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape " + member.getId()));
-            var memberFieldType = memberData.asField(shapeGenMetadataMap);
+            var memberFieldType = memberData.asField();
             // Clear all annotations inside the builder
             var newMemberFieldType = FieldSpec.builder(
                     memberFieldType.type, memberFieldType.name, memberFieldType.modifiers.toArray(new Modifier[0])

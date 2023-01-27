@@ -92,7 +92,7 @@ public class UnionShapeGenMetadata extends ShapeGenMetadata {
     for (var member : memberShapes.values()) {
       var memberData = shapeGenMetadataMap.get(member.getId())
               .orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape " + member.getId()));
-      var memberFieldType = memberData.asField(shapeGenMetadataMap);
+      var memberFieldType = memberData.asField();
 
       specBuilder.addField(memberFieldType);
 

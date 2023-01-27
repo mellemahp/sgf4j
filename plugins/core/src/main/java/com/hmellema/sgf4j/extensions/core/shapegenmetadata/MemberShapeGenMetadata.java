@@ -28,13 +28,16 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
   private final List<AnnotationSpec> fieldAnnotations = new ArrayList<>();
   private final List<MethodSpec> fieldMethods = new ArrayList<>();
 
-  public MemberShapeGenMetadata(Shape shape, TypeName typeName) {
+  public MemberShapeGenMetadata(Shape shape, ShapeGenMetadata targetMetadata) {
     super(shape, SUPPORTED_SHAPE_TYPES);
     var memberShape= (MemberShape) shape;
 
     this.memberName = memberShape.getMemberName();
     this.targetId = memberShape.getTarget();
-    this.typeName = typeName;
+    this.typeName = targetMetadata.getTypeName();
+
+    // inherit all annotations from target as field annotations
+    fieldAnnotations.addAll(targetMetadata.getFieldAnnotations());
   }
 
   public ShapeId getTargetId() {
@@ -42,25 +45,11 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
   }
 
   @Override
-  public FieldSpec asField(ShapeGenMetadataMap shapeGeneratorMap) {
-    var target = shapeGeneratorMap.get(targetId).orElseThrow(
-        () -> new IllegalArgumentException("Tried to access unresolved shape " + targetId)
-    );
-
-    var fieldSpecBuilder = FieldSpec.builder(typeName, memberName)
-            .addModifiers(Modifier.PRIVATE); // Modifier.FINAL  (with initializer?)
-
-    for (var annotation : fieldAnnotations) {
-      fieldSpecBuilder.addAnnotation(annotation);
-    }
-
-    // TODO: Should this be happening in the resolver?
-    // Aggregate all field annotations from target
-    for (var annotation : target.getFieldAnnotations()) {
-      fieldSpecBuilder.addAnnotation(annotation);
-    }
-
-    return fieldSpecBuilder.build();
+  public FieldSpec asField() {
+    return FieldSpec.builder(typeName, memberName)
+            .addModifiers(Modifier.PRIVATE)
+            .addAnnotations(fieldAnnotations)
+            .build(); // Modifier.FINAL  (with initializer?)
   }
 
   @Override

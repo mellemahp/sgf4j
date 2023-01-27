@@ -30,6 +30,6 @@ public class MemberResolver implements Resolver {
     var target = shapeGenMetadataMap.get(memberShape.getTarget()).orElseThrow(
             () -> new IllegalArgumentException("Tried to access unresolved shape " + memberShape.getTarget())
     );
-    return new MemberShapeGenMetadata(shape, target.getTypeName());
+    return new MemberShapeGenMetadata(shape, target);
   }
 }
