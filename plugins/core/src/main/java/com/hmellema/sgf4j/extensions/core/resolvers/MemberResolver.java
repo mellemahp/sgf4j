@@ -25,6 +25,11 @@ public class MemberResolver implements Resolver {
 
   @Override
   public ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap) {
-    return new MemberShapeGenMetadata(shape);
+    // Member types inherit their type from their target
+    var memberShape = (MemberShape) shape;
+    var target = shapeGenMetadataMap.get(memberShape.getTarget()).orElseThrow(
+            () -> new IllegalArgumentException("Tried to access unresolved shape " + memberShape.getTarget())
+    );
+    return new MemberShapeGenMetadata(shape, target.getTypeName());
   }
 }

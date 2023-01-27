@@ -61,11 +61,12 @@ public class ConstructorBuilderStructureProcessor implements Processor {
         var structShape = (StructureShape) shapeGenMetadata.getShape();
         for (var member : structShape.getAllMembers().values()) {
             var memberName = member.getMemberName();
-            var memberTargetMetadata = shapeGenMetadataMap.get(member.getTarget()).orElseThrow(
+            var memberMetadata = shapeGenMetadataMap.get(member.getId()).orElseThrow(
                     () -> new IllegalStateException("Could not find resolved shape for member " + member.getId())
             );
+
             // add parameter for member
-            methodBuilder.addParameter(ParameterSpec.builder(memberTargetMetadata.getTypeName(), memberName, Modifier.FINAL).build());
+            methodBuilder.addParameter(ParameterSpec.builder(memberMetadata.getTypeName(), memberName, Modifier.FINAL).build());
 
             // add a set statement for the member
             methodBuilder.addStatement("this.$L = $L", memberName, memberName);
@@ -97,11 +98,6 @@ public class ConstructorBuilderStructureProcessor implements Processor {
 
             builderClassBuilder.addField(newMemberFieldType);
 
-
-
-            // Add a builder setter for each type
-            var targetData = shapeGenMetadataMap.get(member.getTarget())
-                    .orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape " + member.getTarget()));
             var field = member.getMemberName();
             // add for constructing actual builder
             buildMethodParams.add(field);
@@ -109,7 +105,7 @@ public class ConstructorBuilderStructureProcessor implements Processor {
             builderClassBuilder.addMethod(
                     MethodSpec.methodBuilder(member.getMemberName())
                             .addModifiers(Modifier.PUBLIC)
-                            .addParameter(ParameterSpec.builder(targetData.getTypeName(), field, Modifier.FINAL).build())
+                            .addParameter(ParameterSpec.builder(memberData.getTypeName(), field, Modifier.FINAL).build())
                             .beginControlFlow("if($L == null)", field)
                             .addStatement("throw new NullPointerException(\"$L cannot be null\")", field)
                             .endControlFlow()

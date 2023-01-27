@@ -23,15 +23,18 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
   private final String memberName;
   private final ShapeId targetId;
 
+  private TypeName typeName;
+
   private final List<AnnotationSpec> fieldAnnotations = new ArrayList<>();
   private final List<MethodSpec> fieldMethods = new ArrayList<>();
 
-  public MemberShapeGenMetadata(Shape shape) {
+  public MemberShapeGenMetadata(Shape shape, TypeName typeName) {
     super(shape, SUPPORTED_SHAPE_TYPES);
     var memberShape= (MemberShape) shape;
 
     this.memberName = memberShape.getMemberName();
     this.targetId = memberShape.getTarget();
+    this.typeName = typeName;
   }
 
   public ShapeId getTargetId() {
@@ -44,13 +47,14 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
         () -> new IllegalArgumentException("Tried to access unresolved shape " + targetId)
     );
 
-    var fieldSpecBuilder = FieldSpec.builder(target.getTypeName(), memberName)
+    var fieldSpecBuilder = FieldSpec.builder(typeName, memberName)
             .addModifiers(Modifier.PRIVATE); // Modifier.FINAL  (with initializer?)
 
     for (var annotation : fieldAnnotations) {
       fieldSpecBuilder.addAnnotation(annotation);
     }
 
+    // TODO: Should this be happening in the resolver?
     // Aggregate all field annotations from target
     for (var annotation : target.getFieldAnnotations()) {
       fieldSpecBuilder.addAnnotation(annotation);
@@ -83,12 +87,12 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
 
   @Override
   public TypeName getTypeName() {
-    throw new UnsupportedOperationException("unsupported");
+    return typeName;
   }
 
   @Override
   public void setTypeName(TypeName typeName) {
-    throw new UnsupportedOperationException("unsupported");
+    this.typeName = Objects.requireNonNull(typeName, "typeName cannot be null.");
   }
 
   @Override

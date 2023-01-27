@@ -12,7 +12,7 @@ use com.example#CreationDate
 
 resource TestResource {
     identifiers: {
-        TestId: UUID
+        testId: UUID
     },
     create: CreateTest,
     delete: DeleteTest,
@@ -23,13 +23,13 @@ resource TestResource {
 @readonly
 @http(
     method: "GET",
-    uri: "/Tests/{TestId}"
+    uri: "/tests/{testId}"
 )
 operation GetTestById {
     input := {
         @required
         @httpLabel
-        TestId: UUID
+        testId: UUID
     },
     output: GetTestByIdOutput,
     errors: [
@@ -41,7 +41,7 @@ operation GetTestById {
 @output
 structure GetTestByIdOutput {
     @required
-    TestId: UUID,
+    testId: UUID,
 
     @required
     createdBy: UserName,
@@ -60,7 +60,7 @@ union MyStruct {
 
 @http(
     method: "POST",
-    uri: "/Tests"
+    uri: "/tests"
 )
 operation CreateTest {
     input: CreateTestInput,
@@ -74,7 +74,7 @@ operation CreateTest {
 @input
 structure CreateTestInput{
     @required
-    Test: SafeComment,
+    test: SafeComment,
 
     value: SafeComment = "Test",
 
@@ -89,13 +89,13 @@ map MyMap {
 @output
 structure CreateTestOutput {
     @required
-    TestId: UUID,
+    testId: UUID,
 
     @required
     createdBy: UserName,
 
     @required
-    Test: SafeComment,
+    test: SafeComment,
 
     @required
     creationDate: CreationDate,
@@ -104,7 +104,7 @@ structure CreateTestOutput {
 @idempotent
 @http(
     method: "DELETE",
-    uri: "/Tests/{TestId}"
+    uri: "/tests/{testId}"
 )
 operation DeleteTest {
     input: DeleteTestInput,
@@ -119,7 +119,7 @@ operation DeleteTest {
 structure DeleteTestInput{
     @required
     @httpLabel
-    TestId: UUID
+    testId: UUID
 }
 
 @output
