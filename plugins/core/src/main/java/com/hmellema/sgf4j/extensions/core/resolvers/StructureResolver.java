@@ -30,6 +30,14 @@ public class StructureResolver implements Resolver {
 
   @Override
   public ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap) {
-    return new StructureShapeGenMetadata(shape, TypeConversionUtil.extractStandaloneTypeName(shape));
+    var structureShape = (StructureShape) shape;
+    var memberData = structureShape.getAllMembers()
+            .values().stream()
+            .map(Shape::getId)
+            .map(shapeGenMetadataMap::get)
+            .map(memberDataOptional -> memberDataOptional.orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape")))
+            .collect(Collectors.toList());
+
+    return new StructureShapeGenMetadata(shape, memberData);
   }
 }

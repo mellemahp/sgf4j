@@ -1,6 +1,8 @@
 package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
+import com.hmellema.sgf4j.extensions.core.util.TypeConversionUtil;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
+import com.hmellema.sgf4j.gendata.providers.FieldProvider;
 import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.*;
 
@@ -30,14 +32,17 @@ public class StructureShapeGenMetadata extends ShapeGenMetadata {
   private final String className;
 
   private final List<FieldSpec> additionalFields = new ArrayList<>();
+  private final List<MethodSpec> fieldMethods = new ArrayList<>();
 
   private TypeName parentType;
 
-  public StructureShapeGenMetadata(Shape shape, TypeName typeName) {
+  public StructureShapeGenMetadata(Shape shape, List<ShapeGenMetadata> memberData) {
     super(shape, SUPPORTED_SHAPES);
-    this.typeName = Objects.requireNonNull(typeName, "typeName cannot be null.");
+    this.typeName = TypeConversionUtil.extractStandaloneTypeName(shape);
     this.nameSpace = shape.getId().getNamespace();
     this.className = shape.getId().getName();
+    additionalFields.addAll(memberData.stream().map(FieldProvider::asField).toList());
+    fieldMethods.addAll(memberData.stream().flatMap(member -> member.getFieldAssociatedMethods().stream()).toList());
   }
 
   @Override
@@ -84,41 +89,15 @@ public class StructureShapeGenMetadata extends ShapeGenMetadata {
   @Override
   public Optional<TypeSpec> asClass(ShapeGenMetadataMap shapeGenMetadataMap) {
     var specBuilder = TypeSpec.classBuilder(className)
-        .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-
-    for (var annotation : classAnnotations) {
-      specBuilder.addAnnotation(annotation);
-    }
-
-    for (var associatedMethod : this.getClassAssociatedMethods()) {
-      specBuilder.addMethod(associatedMethod);
-    }
-
-    var structureShape = (StructureShape) getShape();
-    var memberShapes = structureShape.getAllMembers();
-    for (var member : memberShapes.values()) {
-      var memberData = shapeGenMetadataMap.get(member.getId())
-          .orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape " + member.getId()));
-      var memberFieldType = memberData.asField();
-
-      specBuilder.addField(memberFieldType);
-
-      for (var associatedMethod : memberData.getFieldAssociatedMethods()) {
-        specBuilder.addMethod(associatedMethod);
-      }
-    }
-
-    // Add any additional class fields
-    for (var classField : getAdditionalClassFields()) {
-      specBuilder.addField(classField);
-    }
+        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+        .addAnnotations(classAnnotations)
+        .addMethods(this.getClassAssociatedMethods())
+        .addFields(getAdditionalClassFields())
+        .addMethods(fieldMethods)
+        .addTypes(nestedClasses);
 
     if (parentType != null) {
       specBuilder.superclass(parentType);
-    }
-
-    for (var nestedClass : nestedClasses) {
-      specBuilder.addType(nestedClass);
     }
 
     return Optional.of(specBuilder.build());

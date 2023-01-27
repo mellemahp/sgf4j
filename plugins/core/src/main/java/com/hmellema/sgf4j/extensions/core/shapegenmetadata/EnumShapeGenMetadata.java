@@ -1,5 +1,6 @@
 package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
+import com.hmellema.sgf4j.extensions.core.util.TypeConversionUtil;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.AnnotationSpec;
@@ -29,17 +30,12 @@ public class EnumShapeGenMetadata extends ShapeGenMetadata {
   private String nameSpace;
   private String className;
 
-  public EnumShapeGenMetadata(Shape shape, TypeName typeName) {
+  public EnumShapeGenMetadata(Shape shape) {
     super(shape, SUPPORTED_SHAPES);
-    this.typeName = Objects.requireNonNull(typeName, "typeName cannot be null.");
+    this.typeName = TypeConversionUtil.extractStandaloneTypeName(shape);
     this.nameSpace = shape.getId().getNamespace();
     this.className = shape.getId().getName();
   }
-
-  protected EnumShapeGenMetadata(Shape shape, EnumSet<ShapeType> allowedShapeTypes) {
-    super(shape, allowedShapeTypes);
-  }
-
 
   @Override
   public List<MethodSpec> getFieldAssociatedMethods() {

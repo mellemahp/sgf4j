@@ -18,6 +18,6 @@ public class EnumResolver implements Resolver {
 
   @Override
   public ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap) {
-    return new EnumShapeGenMetadata(shape, TypeConversionUtil.extractStandaloneTypeName(shape));
+    return new EnumShapeGenMetadata(shape);
   }
 }
