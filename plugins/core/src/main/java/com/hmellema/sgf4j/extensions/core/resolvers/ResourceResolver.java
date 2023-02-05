@@ -1,6 +1,6 @@
 package com.hmellema.sgf4j.extensions.core.resolvers;
 
-import com.hmellema.sgf4j.extensions.core.shapegenmetadata.ResourceShapeGenMetada;
+import com.hmellema.sgf4j.extensions.core.shapegenmetadata.ResourceShapeGenMetadata;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.loader.MetaDataLoader;
 import com.hmellema.sgf4j.resolving.Resolver;
@@ -17,6 +17,6 @@ public class ResourceResolver implements Resolver {
 
   @Override
   public ShapeGenMetadata resolve(Shape shape, MetaDataLoader metaDataLoader) {
-    return new ResourceShapeGenMetada(shape);
+    return new ResourceShapeGenMetadata(shape);
   }
 }

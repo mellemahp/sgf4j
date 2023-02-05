@@ -32,8 +32,8 @@ public class GeneratedAnnotationProcessor implements Processor {
         try {
             shapeGenMetadata.addClassAnnotation(generatedAnnotation);
         } catch (UnsupportedOperationException exc) {
-            // Just keep going if the particular shape doesnt support the annotation
-            // This way it is added whereever it can be
+            // Just keep going if the particular shape doesn't support the annotation
+            // This way it is added wherever it can be
         }
     }
 }

@@ -4,11 +4,7 @@ import com.hmellema.sgf4j.extensions.core.shapegenmetadata.ServiceShapeGenMetada
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.loader.MetaDataLoader;
 import com.hmellema.sgf4j.resolving.Resolver;
-import java.util.HashSet;
-import java.util.Set;
-import software.amazon.smithy.model.shapes.ServiceShape;
 import software.amazon.smithy.model.shapes.Shape;
-import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public class ServiceResolver implements Resolver {

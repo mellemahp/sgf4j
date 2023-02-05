@@ -30,38 +30,37 @@ public class ToStringStructureProcessor implements Processor {
     @Override
     public void process(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
 
-        List<String> vals = new ArrayList<>();
-        List<String> statementStrs = new ArrayList<>();
+        List<String> values = new ArrayList<>();
+        List<String> statementStrings = new ArrayList<>();
         var startString = shapeGenMetadata.getShape().getId().getName() + "(";
-        vals.add(startString);
-        vals.add("+");
+        values.add(startString);
+        values.add("+");
 
         boolean first = true;
         var structureShape = (StructureShape) shapeGenMetadata.getShape();
         for (var memberName : structureShape.getAllMembers().keySet()) {
             // string part
             if (first) {
-                vals.add(memberName + "=");
+                values.add(memberName + "=");
                 first = false;
             } else {
-                vals.add("," + memberName + "=");
+                values.add("," + memberName + "=");
             }
 
             // literal part
-            vals.add("+ this." + memberName + " ");
-            // corresponding vals in the statement block
-            statementStrs.add("$S $L ");
+            values.add("+ this." + memberName + " ");
+            // corresponding values in the statement block
+            statementStrings.add("$S $L ");
         }
-        vals.add("+");
-        vals.add(")");
+        values.add("+");
+        values.add(")");
         var startStatement = "return $S $L ";
-        var statement = startStatement + String.join("+", statementStrs) + "$L $S";
-
+        var statement = startStatement + String.join("+", statementStrings) + "$L $S";
 
         var toStringMethod = MethodSpec.methodBuilder("toString")
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement(statement, vals.toArray())
+                .addStatement(statement, values.toArray())
                 .returns(ClassName.get(String.class))
                 .build();
 

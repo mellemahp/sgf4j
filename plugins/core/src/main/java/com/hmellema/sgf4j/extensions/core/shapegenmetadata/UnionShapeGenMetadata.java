@@ -7,7 +7,6 @@ import java.util.*;
 
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
-import software.amazon.smithy.model.shapes.UnionShape;
 
 import javax.lang.model.element.Modifier;
 

@@ -13,14 +13,12 @@ import java.util.Objects;
 import javax.lang.model.element.Modifier;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
-import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public class MemberShapeGenMetadata extends ShapeGenMetadata {
   private static final EnumSet<ShapeType> SUPPORTED_SHAPE_TYPES = EnumSet.of(ShapeType.MEMBER);
 
   private final String memberName;
-  private final ShapeId targetId;
 
   private TypeName typeName;
 
@@ -32,7 +30,6 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
     var memberShape= (MemberShape) shape;
 
     this.memberName = memberShape.getMemberName();
-    this.targetId = memberShape.getTarget();
     this.typeName = targetMetadata.getTypeName();
 
     // inherit all annotations from target as field annotations

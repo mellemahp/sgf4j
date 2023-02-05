@@ -4,10 +4,8 @@ import com.hmellema.sgf4j.extensions.core.shapegenmetadata.MemberShapeGenMetadat
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.loader.MetaDataLoader;
 import com.hmellema.sgf4j.resolving.Resolver;
-import java.util.Set;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
-import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public class MemberResolver implements Resolver {

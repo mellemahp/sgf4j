@@ -10,10 +10,10 @@ import java.util.List;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
-public class ResourceShapeGenMetada extends ShapeGenMetadata {
+public class ResourceShapeGenMetadata extends ShapeGenMetadata {
   private static final EnumSet<ShapeType> SUPPORTED_TYPE = EnumSet.of(ShapeType.RESOURCE);
 
-  public ResourceShapeGenMetada(Shape shape) {
+  public ResourceShapeGenMetadata(Shape shape) {
     super(shape, SUPPORTED_TYPE);
   }
 

@@ -2,7 +2,6 @@ package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
 import com.hmellema.sgf4j.extensions.core.util.TypeConversionUtil;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.loader.MetaDataLoader;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
@@ -28,7 +27,7 @@ public class EnumShapeGenMetadata extends ShapeGenMetadata {
 
   private TypeName typeName;
   private String nameSpace;
-  private String className;
+  private final String className;
 
   public EnumShapeGenMetadata(Shape shape) {
     super(shape, SUPPORTED_SHAPES);

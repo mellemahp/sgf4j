@@ -37,7 +37,7 @@ public interface Sgf4jGenerator {
         return generate(resolvedClosure);
     }
 
-    /** Extracts a single service shape from a smity model
+    /** Extracts a single service shape from a smithy model
      *
      * NOTE: multiple services are not supported for generation at this time
      *
@@ -62,7 +62,7 @@ public interface Sgf4jGenerator {
     /** Generate the JavaPoet {@link JavaFile} for a shape
      *
      * @param shapeGenMetadata input shape metadata
-     * @return Optional of the generated {@link JavaFile}. If the shape does not represent a standalone java class this should return Optional.empty
+     * @return Optional of the generated {@link JavaFile}. If the shape does not represent a standalone java class this should return {@code Optional.EMPTY}
      */
     static Optional<JavaFile> generate(ShapeGenMetadata shapeGenMetadata) {
         var typeOptional = shapeGenMetadata.asClass();

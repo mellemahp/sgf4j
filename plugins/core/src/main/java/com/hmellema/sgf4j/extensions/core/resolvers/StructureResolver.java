@@ -8,7 +8,6 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.shapes.StructureShape;
 
-import java.util.stream.Collectors;
 
 public class StructureResolver implements Resolver {
   private static final ShapeType SUPPORTED_TYPE = ShapeType.STRUCTURE;
