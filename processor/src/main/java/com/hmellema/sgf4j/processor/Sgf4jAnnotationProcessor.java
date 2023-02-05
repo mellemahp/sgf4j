@@ -4,8 +4,6 @@ import com.google.auto.service.AutoService;
 import com.hmellema.sgf4j.annotations.Sgf4j;
 import com.hmellema.sgf4j.api.Sgf4jGenerationRequest;
 import com.hmellema.sgf4j.api.Sgf4jGenerator;
-import com.hmellema.sgf4j.extension.CodeGenExtension;
-import com.hmellema.sgf4j.util.ExtensionLoader;
 import com.hmellema.sgf4j.util.ModelLoader;
 import com.hmellema.sgf4j.processor.exceptions.FailToLoadAstException;
 import com.squareup.javapoet.JavaFile;

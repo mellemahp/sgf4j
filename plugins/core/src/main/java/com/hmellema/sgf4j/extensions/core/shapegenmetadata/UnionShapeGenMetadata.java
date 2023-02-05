@@ -1,14 +1,12 @@
 package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.*;
 
 import java.util.*;
 
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
-import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.model.shapes.UnionShape;
 
 import javax.lang.model.element.Modifier;
@@ -16,6 +14,7 @@ import javax.lang.model.element.Modifier;
 public class UnionShapeGenMetadata extends ShapeGenMetadata {
   private static final EnumSet<ShapeType> SUPPORTED_SHAPES = EnumSet.of(ShapeType.UNION);
 
+  private final List<FieldSpec> fields = new ArrayList<>();
   private final List<AnnotationSpec> fieldAnnotations = new ArrayList<>();
   private final List<AnnotationSpec> classAnnotations = new ArrayList<>();
   private final List<MethodSpec> associatedMethods = new ArrayList<>();
@@ -26,11 +25,18 @@ public class UnionShapeGenMetadata extends ShapeGenMetadata {
   private String nameSpace;
   private final String className;
 
-  public UnionShapeGenMetadata(Shape shape, TypeName typeName) {
+  public UnionShapeGenMetadata(Shape shape, TypeName typeName, List<ShapeGenMetadata> memberDataList) {
     super(shape, SUPPORTED_SHAPES);
     this.typeName = Objects.requireNonNull(typeName, "typeName cannot be null.");
     this.nameSpace = shape.getId().getNamespace();
     this.className = shape.getId().getName();
+
+    for (var memberData : memberDataList) {
+      fields.add(memberData.asField());
+      associatedMethods.addAll(memberData.getFieldAssociatedMethods());
+    }
+
+
   }
 
   @Override
@@ -75,40 +81,20 @@ public class UnionShapeGenMetadata extends ShapeGenMetadata {
   }
 
   @Override
-  public Optional<TypeSpec> asClass(ShapeGenMetadataMap shapeGenMetadataMap) {
+  public Optional<TypeSpec> asClass() {
     var specBuilder = TypeSpec.classBuilder(className)
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
-    for (var annotation : classAnnotations) {
-      specBuilder.addAnnotation(annotation);
-    }
+    specBuilder.addAnnotations(classAnnotations);
+    specBuilder.addMethods(associatedMethods);
 
-    for (var associatedMethod : this.getClassAssociatedMethods()) {
-      specBuilder.addMethod(associatedMethod);
-    }
-
-    var unionShape = (UnionShape) getShape();
-    var memberShapes = unionShape.getAllMembers();
-    for (var member : memberShapes.values()) {
-      var memberData = shapeGenMetadataMap.get(member.getId())
-              .orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape " + member.getId()));
-      var memberFieldType = memberData.asField();
-
-      specBuilder.addField(memberFieldType);
-
-      for (var associatedMethod : memberData.getFieldAssociatedMethods()) {
-        specBuilder.addMethod(associatedMethod);
-      }
-    }
+    // Add fields
+    specBuilder.addFields(fields);
 
     // Add any additional class fields
-    for (var classField : getAdditionalClassFields()) {
-      specBuilder.addField(classField);
-    }
+    specBuilder.addFields(getAdditionalClassFields());
 
-    for (var nestedClass : nestedClasses) {
-      specBuilder.addType(nestedClass);
-    }
+    specBuilder.addTypes(nestedClasses);
 
     return Optional.of(specBuilder.build());
   }

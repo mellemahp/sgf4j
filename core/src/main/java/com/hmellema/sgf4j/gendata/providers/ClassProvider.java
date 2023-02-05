@@ -1,17 +1,15 @@
 package com.hmellema.sgf4j.gendata.providers;
 
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface ClassProvider {
     // Some shapes can be represented as a standalone class
     // Shapes that cannot be represented as a standalone class should return Optional.empty()
-    default Optional<TypeSpec> asClass(ShapeGenMetadataMap shapeGeneratorMap) {
+    default Optional<TypeSpec> asClass() {
         return Optional.empty();
     }
 

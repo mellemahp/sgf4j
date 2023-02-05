@@ -2,8 +2,8 @@ package com.hmellema.sgf4j.extensions.jackson.processors;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Processor;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.traitprocessing.Processor;
 import com.squareup.javapoet.AnnotationSpec;
 import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.shapes.StructureShape;
@@ -28,7 +28,7 @@ public class DeserializationOrderProcessor implements Processor {
     }
 
     @Override
-    public void process(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+    public void process(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
         if (shapeGenMetadata.getShape().hasTrait(INPUT_TRAIT)) {
             // We do not need to create serialization annotations on an input trait as it should
             // never be marshalled/serialized

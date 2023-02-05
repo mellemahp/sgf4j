@@ -2,12 +2,11 @@ package com.hmellema.sgf4j.extensions.core.resolvers;
 
 import com.hmellema.sgf4j.extensions.core.shapegenmetadata.SimpleShapeGenMetadata;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Resolver;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.resolving.Resolver;
 import com.squareup.javapoet.TypeName;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
-import software.amazon.smithy.model.traits.BoxTrait;
 
 public class IntegerResolver implements Resolver {
   private static final ShapeType SUPPORTED_SHAPE_TYPE = ShapeType.INTEGER;
@@ -19,7 +18,7 @@ public class IntegerResolver implements Resolver {
   }
 
   @Override
-  public ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap) {
+  public ShapeGenMetadata resolve(Shape shape, MetaDataLoader metaDataLoader) {
       return new SimpleShapeGenMetadata(shape, INTEGER_TYPE_NAME);
   }
 }

@@ -2,8 +2,8 @@ package com.hmellema.sgf4j.extensions.core.resolvers;
 
 import com.hmellema.sgf4j.extensions.core.shapegenmetadata.SimpleShapeGenMetadata;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Resolver;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.resolving.Resolver;
 import com.squareup.javapoet.TypeName;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
@@ -18,7 +18,7 @@ public class StringResolver implements Resolver {
   }
 
   @Override
-  public ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap) {
+  public ShapeGenMetadata resolve(Shape shape, MetaDataLoader metaDataLoader) {
     return new SimpleShapeGenMetadata(shape, STRING_TYPE_NAME);
   }
 }

@@ -1,6 +1,5 @@
 package com.hmellema.sgf4j.gendata.providers;
 
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;

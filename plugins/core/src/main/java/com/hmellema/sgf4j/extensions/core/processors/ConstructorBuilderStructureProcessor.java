@@ -1,8 +1,8 @@
 package com.hmellema.sgf4j.extensions.core.processors;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Processor;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.traitprocessing.Processor;
 import com.squareup.javapoet.*;
 import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.shapes.StructureShape;
@@ -25,7 +25,7 @@ public class ConstructorBuilderStructureProcessor implements Processor {
     }
 
     @Override
-    public void process(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+    public void process(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
         var structureShape = (StructureShape) shapeGenMetadata.getShape();
         if (structureShape.hasTrait(INPUT_TRAIT)) {
             // Do not create a non-default constructor or a builder for inputs.
@@ -35,11 +35,11 @@ public class ConstructorBuilderStructureProcessor implements Processor {
         }
 
         //
-        var constructor = getConstructor(shapeGenMetadata, shapeGenMetadataMap);
+        var constructor = getConstructor(shapeGenMetadata, metaDataLoader);
         shapeGenMetadata.addClassAssociatedMethod(constructor);
 
         // create builder class
-        var builderClass = getBuilder(shapeGenMetadata, shapeGenMetadataMap);
+        var builderClass = getBuilder(shapeGenMetadata, metaDataLoader);
         shapeGenMetadata.addNestedClass(builderClass);
 
         // add static builder method
@@ -55,15 +55,13 @@ public class ConstructorBuilderStructureProcessor implements Processor {
                 .build();
     }
 
-    private MethodSpec getConstructor(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+    private MethodSpec getConstructor(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
         var methodBuilder = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
 
         var structShape = (StructureShape) shapeGenMetadata.getShape();
         for (var member : structShape.getAllMembers().values()) {
             var memberName = member.getMemberName();
-            var memberMetadata = shapeGenMetadataMap.get(member.getId()).orElseThrow(
-                    () -> new IllegalStateException("Could not find resolved shape for member " + member.getId())
-            );
+            var memberMetadata = metaDataLoader.resolve(member.getId());
 
             // add parameter for member
             methodBuilder.addParameter(ParameterSpec.builder(memberMetadata.getTypeName(), memberName, Modifier.FINAL).build());
@@ -76,7 +74,7 @@ public class ConstructorBuilderStructureProcessor implements Processor {
         return methodBuilder.build();
     }
 
-    private TypeSpec getBuilder(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+    private TypeSpec getBuilder(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
         var builderClassBuilder = TypeSpec.classBuilder("Builder")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addJavadoc("Static builder class for {@link $T}", shapeGenMetadata.getTypeName());
@@ -86,8 +84,7 @@ public class ConstructorBuilderStructureProcessor implements Processor {
         var memberShapes = structureShape.getAllMembers();
         for (var member : memberShapes.values()) {
             // Add a field for the member type
-            var memberData = shapeGenMetadataMap.get(member.getId())
-                    .orElseThrow(() -> new IllegalArgumentException("Tried to access unresolved shape " + member.getId()));
+            var memberData = metaDataLoader.resolve(member.getId());
             var memberFieldType = memberData.asField();
             // Clear all annotations inside the builder
             var newMemberFieldType = FieldSpec.builder(

@@ -1,8 +1,8 @@
 package com.hmellema.sgf4j.extensions.beanvalidation.processors;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Processor;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.traitprocessing.Processor;
 import com.squareup.javapoet.AnnotationSpec;
 import jakarta.validation.constraints.NotNull;
 import software.amazon.smithy.model.shapes.ShapeType;
@@ -41,7 +41,7 @@ public class RequiredTraitProcessor implements Processor {
   public Set<String> getSupportedTraitNames() { return SUPPORTED_TRAITS; }
 
   @Override
-  public void process(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+  public void process(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
     shapeGenMetadata.addFieldAnnotation(AnnotationSpec.builder(NotNull.class).build());
   }
 }

@@ -2,7 +2,7 @@ package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
 import com.hmellema.sgf4j.extensions.core.util.TypeConversionUtil;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
@@ -79,20 +79,15 @@ public class EnumShapeGenMetadata extends ShapeGenMetadata {
   }
 
   @Override
-  public Optional<TypeSpec> asClass(ShapeGenMetadataMap metadataMap) {
+  public Optional<TypeSpec> asClass() {
     var specBuilder = TypeSpec.enumBuilder(className)
         .addModifiers(Modifier.PUBLIC);
 
-    for (var annotation : classAnnotations) {
-      specBuilder.addAnnotation(annotation);
-    }
-
-    for (var associatedMethod: this.getClassAssociatedMethods()) {
-      specBuilder.addMethod(associatedMethod);
-    }
+    specBuilder.addAnnotations(classAnnotations);
+    specBuilder.addMethods(getClassAssociatedMethods());
 
     // CREATE CONSTRUCTOR
-    switch (getShape().getType()) {
+    switch (getShapeType()) {
       case ENUM -> {
         specBuilder.addField(String.class, VALUE_FIELD_NAME, Modifier.PRIVATE, Modifier.FINAL);
         specBuilder.addMethod(MethodSpec.constructorBuilder()
@@ -122,7 +117,7 @@ public class EnumShapeGenMetadata extends ShapeGenMetadata {
       );
 
       TypeSpec enumValueSpec;
-      switch (getShape().getType()) {
+      switch (getShapeType()) {
         case ENUM -> {
           var traitValue = trait.getStringValue().orElseThrow(() -> {
             throw new IllegalStateException("Expected int value for enum");

@@ -2,8 +2,8 @@ package com.hmellema.sgf4j.extensions.core.resolvers;
 
 import com.hmellema.sgf4j.extensions.core.shapegenmetadata.ServiceShapeGenMetadata;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Resolver;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.resolving.Resolver;
 import java.util.HashSet;
 import java.util.Set;
 import software.amazon.smithy.model.shapes.ServiceShape;
@@ -20,23 +20,7 @@ public class ServiceResolver implements Resolver {
   }
 
   @Override
-  public Set<ShapeId> getDependentShapes(Shape shape) {
-    var serviceShape = (ServiceShape) shape;
-    // Add all independent operations
-    Set<ShapeId> dependentShapes = new HashSet<>(serviceShape.getAllOperations());
-
-    // Add all resources
-    dependentShapes.addAll(serviceShape.getResources());
-
-    // Add all errors
-    dependentShapes.addAll(serviceShape.getErrors());
-
-    return dependentShapes;
-  }
-
-
-  @Override
-  public ShapeGenMetadata resolve(Shape shape, ShapeGenMetadataMap shapeGenMetadataMap) {
+  public ShapeGenMetadata resolve(Shape shape, MetaDataLoader metaDataLoader) {
     return new ServiceShapeGenMetadata(shape);
   }
 }

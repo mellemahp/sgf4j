@@ -1,7 +1,6 @@
 package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
@@ -38,10 +37,6 @@ public class MemberShapeGenMetadata extends ShapeGenMetadata {
 
     // inherit all annotations from target as field annotations
     fieldAnnotations.addAll(targetMetadata.getFieldAnnotations());
-  }
-
-  public ShapeId getTargetId() {
-    return this.targetId;
   }
 
   @Override

@@ -3,7 +3,6 @@ package com.hmellema.sgf4j.extensions.core.shapegenmetadata;
 import com.hmellema.sgf4j.extensions.core.util.TypeConversionUtil;
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
 import com.hmellema.sgf4j.gendata.providers.FieldProvider;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
 import com.squareup.javapoet.*;
 
 import java.util.ArrayList;
@@ -15,7 +14,6 @@ import java.util.Optional;
 import javax.lang.model.element.Modifier;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
-import software.amazon.smithy.model.shapes.StructureShape;
 
 public class StructureShapeGenMetadata extends ShapeGenMetadata {
   private static final EnumSet<ShapeType> SUPPORTED_SHAPES = EnumSet.of(ShapeType.STRUCTURE);
@@ -87,7 +85,7 @@ public class StructureShapeGenMetadata extends ShapeGenMetadata {
   }
 
   @Override
-  public Optional<TypeSpec> asClass(ShapeGenMetadataMap shapeGenMetadataMap) {
+  public Optional<TypeSpec> asClass() {
     var specBuilder = TypeSpec.classBuilder(className)
         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         .addAnnotations(classAnnotations)

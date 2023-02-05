@@ -1,8 +1,8 @@
 package com.hmellema.sgf4j.extensions.core.processors;
 
 import com.hmellema.sgf4j.gendata.ShapeGenMetadata;
-import com.hmellema.sgf4j.mapping.Processor;
-import com.hmellema.sgf4j.mapping.ShapeGenMetadataMap;
+import com.hmellema.sgf4j.loader.MetaDataLoader;
+import com.hmellema.sgf4j.traitprocessing.Processor;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public class GetterStructureProcessor implements Processor {
     }
 
     @Override
-    public void process(ShapeGenMetadata shapeGenMetadata, ShapeGenMetadataMap shapeGenMetadataMap) {
+    public void process(ShapeGenMetadata shapeGenMetadata, MetaDataLoader metaDataLoader) {
         shapeGenMetadata.addFieldMethod(methodSpecGenerator(shapeGenMetadata.asField()));
     }
 
