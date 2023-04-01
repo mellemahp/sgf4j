@@ -1,3 +1,7 @@
+[DEPRECATED]
+This project should not be used. Instead use the official smithy Directed codegen: https://smithy.io/2.0/guides/building-codegen/index.html
+Im going to re-start a new project for generating java code using the official smithy approach
+
 # sgf4j
 Smithy Generation Framework for Java. A plugin-centric framework, sgf4j uses `javapoet` to generate java code from an [aws smithy](https://smithy.io/2.0/index.html) specification. 
 
